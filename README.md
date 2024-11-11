@@ -3,7 +3,7 @@
 
 ## Sobre o Jogo
 
-`definitelyNotWordle` é um jogo de palavras onde os jogadores tentam adivinhar uma palavra secreta de 5 letras. 
+`definitelyNotWordle` é um joginho de palavras onde os jogadores tentam adivinhar uma palavra secreta de 5 letras. 
 O servidor escolhe uma palavra aleatória e fornece feedback sobre as letras e suas posições a cada tentativa 
 do cliente. O jogo é implementado em Python e utiliza sockets para comunicação entre cliente e servidor em 
 rede local.
@@ -55,10 +55,6 @@ O projeto é composto por dois arquivos principais:
 - O cliente solicita o IP do servidor e conecta-se à porta 12345.
 - Envia tentativas de palavras e exibe feedback recebido do servidor até acertar a palavra ou esgotar as tentativas.
 
-## Personalização
-
-Você pode adicionar mais palavras à lista em `servidor.py` para variar as palavras escolhidas aleatoriamente pelo jogo.
-
 ## Exemplo de Sessão de Jogo
 
 1. **Servidor** inicia e exibe o IP local.
@@ -74,7 +70,3 @@ Você pode adicionar mais palavras à lista em `servidor.py` para variar as pala
    ```
 
 3. O cliente continua tentando até acertar ou acabar as tentativas. Ao final, o servidor oferece a opção de jogar novamente.
-
-## Licença
-
-Este projeto é fornecido "como está" e destina-se a fins educacionais e de aprendizado de redes.
