@@ -4,7 +4,7 @@ import random
 
 # Configurações do servidor
 HOST = ''  # Permite que o servidor aceite conexões de qualquer IP na rede local
-PORT = 12345  # Porta na qual o servidor irá escutar
+PORT = 12345  # Porta na qual o servidor vai escutar
 
 # Lista de palavras para o jogo
 palavras = [
