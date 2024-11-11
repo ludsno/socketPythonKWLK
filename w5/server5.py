@@ -4,7 +4,7 @@ import random
 
 # Configurações do servidor
 HOST = ''  # Permite que o servidor aceite conexões de qualquer IP na rede local
-PORT = 12345
+PORT = 12345  # Porta na qual o servidor irá escutar
 
 # Lista de palavras para o jogo
 palavras = [
@@ -24,46 +24,52 @@ def obter_ipv4_local():
     """
     Detecta o endereço IPv4 da máquina no qual o servidor está sendo executado.
     """
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # Cria um socket UDP
     try:
         # Conectando-se a um servidor externo para descobrir o IP local
         s.connect(("8.8.8.8", 80))  # Usando o Google DNS para uma conexão de rede
         ip_local = s.getsockname()[0]  # Obtém o IP da máquina
     finally:
-        s.close()
+        s.close()  # Fecha o socket
     return ip_local
 
 def verificar_palavra(palavra_secreta, tentativa):
+    """
+    Verifica a tentativa do jogador e retorna um feedback.
+    """
     feedback = ""
     for i in range(len(palavra_secreta)):
         if tentativa[i] == palavra_secreta[i]:
-            feedback += tentativa[i].upper()
+            feedback += tentativa[i].upper()  # Letra correta na posição correta
         elif tentativa[i] in palavra_secreta:
-            feedback += tentativa[i].lower()
+            feedback += tentativa[i].lower()  # Letra correta na posição errada
         else:
-            feedback += "*"
+            feedback += "*"  # Letra incorreta
     return feedback
 
 def gerenciar_cliente(conn, addr):
+    """
+    Gerencia a conexão com um cliente.
+    """
     print(f"Cliente conectado: {addr}")
 
     while True:
-        palavra_secreta = random.choice(palavras)
-        tentativas_restantes = 6
+        palavra_secreta = random.choice(palavras)  # Escolhe uma palavra aleatória
+        tentativas_restantes = 6  # Número de tentativas permitidas
         conn.send(f"Bem-vindo ao definitelyNotWordle! Tente adivinhar a palavra de {len(palavra_secreta)} letras.".encode('utf-8'))
 
         while tentativas_restantes > 0:
             try:
-                tentativa = conn.recv(1024).decode('utf-8').strip().lower()
+                tentativa = conn.recv(1024).decode('utf-8').strip().lower()  # Recebe a tentativa do cliente
 
                 if tentativa == palavra_secreta:
                     conn.send("Parabéns! Você acertou a palavra! Deseja jogar novamente? (s/n)".encode('utf-8'))
                     break
                 else:
                     tentativas_restantes -= 1
-                    feedback = verificar_palavra(palavra_secreta, tentativa)
+                    feedback = verificar_palavra(palavra_secreta, tentativa)  # Verifica a tentativa
                     mensagem = f"Tentativa: {feedback} | Tentativas restantes: {tentativas_restantes}"
-                    conn.send(mensagem.encode('utf-8'))
+                    conn.send(mensagem.encode('utf-8'))  # Envia o feedback para o cliente
 
             except ConnectionError:
                 print(f"Conexão perdida com {addr}")
@@ -74,7 +80,7 @@ def gerenciar_cliente(conn, addr):
             conn.send(f"Game over! A palavra era '{palavra_secreta}'. Deseja jogar novamente? (s/n)".encode('utf-8'))
 
         try:
-            resposta = conn.recv(1024).decode('utf-8').strip().lower()
+            resposta = conn.recv(1024).decode('utf-8').strip().lower()  # Recebe a resposta do cliente
             if resposta != 's':
                 conn.send("Obrigado por jogar! Até a próxima.".encode('utf-8'))
                 break
@@ -82,21 +88,24 @@ def gerenciar_cliente(conn, addr):
             print(f"Conexão encerrada inesperadamente com {addr}")
             break
 
-    conn.close()
+    conn.close()  # Fecha a conexão com o cliente
 
 def iniciar_servidor():
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.bind((HOST, PORT))
-    server.listen(5)
+    """
+    Inicia o servidor e aguarda conexões de clientes.
+    """
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # Cria um socket TCP
+    server.bind((HOST, PORT))  # Associa o socket ao endereço e porta
+    server.listen(5)  # Habilita o servidor a aceitar conexões
 
     ip_local = obter_ipv4_local()  # Obtém o IP local da máquina
     print(f"Servidor iniciado em {ip_local}:{PORT}. Aguardando conexões...")
 
     try:
         while True:
-            conn, addr = server.accept()
-            threading.Thread(target=gerenciar_cliente, args=(conn, addr)).start()
+            conn, addr = server.accept()  # Aceita uma nova conexão
+            threading.Thread(target=gerenciar_cliente, args=(conn, addr)).start()  # Cria uma nova thread para gerenciar o cliente
     except KeyboardInterrupt:
         print("Servidor encerrado.")
 
-iniciar_servidor()
+iniciar_servidor()  # Inicia o servidor
