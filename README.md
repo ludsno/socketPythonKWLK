@@ -3,7 +3,7 @@
 
 ## Sobre o Jogo
 
-`definitelyNotWordle` é um joginho de palavras onde os jogadores tentam adivinhar uma palavra secreta de 5 letras. 
+`definitelyNotWordle` é um joguinho de palavras onde os jogadores tentam adivinhar uma palavra secreta de 5 letras. 
 O servidor escolhe uma palavra aleatória e fornece feedback sobre as letras e suas posições a cada tentativa 
 do cliente. O jogo é implementado em Python e utiliza sockets para comunicação entre cliente e servidor em 
 rede local.
