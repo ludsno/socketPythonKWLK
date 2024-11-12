@@ -35,17 +35,26 @@ def obter_ipv4_local():
 
 def verificar_palavra(palavra_secreta, tentativa):
     """
-    Verifica a tentativa do jogador e retorna um feedback.
+    Verifica a tentativa do jogador e retorna um feedback com quadrados ao redor das letras.
     """
     feedback = ""
+
+    COR_CORRETA = '\033[32m'  # Verde para letras corretas
+    COR_POSICAO_ERRADA = '\033[33m'  # Amarelo para letras corretas mas na posição errada
+    COR_INCORRETA = '\033[31m'  # Vermelho para letras incorretas
+    RESET = '\033[0m'  # Reset para cor padrão
+
     for i in range(len(palavra_secreta)):
+        letra = tentativa[i].upper()
+        # Adicionando quadrado ao redor da letra
         if tentativa[i] == palavra_secreta[i]:
-            feedback += tentativa[i].upper()  # Letra correta na posição correta
+            feedback += f"{COR_CORRETA}[ {letra} ]{RESET}"  # Letra correta na posição correta
         elif tentativa[i] in palavra_secreta:
-            feedback += tentativa[i].lower()  # Letra correta na posição errada
+            feedback += f"{COR_POSICAO_ERRADA}[ {letra} ]{RESET}"  # Letra correta na posição errada
         else:
-            feedback += "*"  # Letra incorreta
+            feedback += f"{COR_INCORRETA}[ * ]{RESET}"  # Letra incorreta
     return feedback
+
 
 def gerenciar_cliente(conn, addr):
     """
